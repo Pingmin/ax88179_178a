@@ -64,7 +64,7 @@ Usage
 
 If you want to unload the driver, just executing the following command:
 
-	[root@localhost anywhere]# rmmod axax88179_178a
+	[root@localhost anywhere]# rmmod ax88179_178a
 
 ===============
 DRIVER PARAMETERS
