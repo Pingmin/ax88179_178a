@@ -244,9 +244,9 @@ static void ax88179_async_cmd_callback(struct urb *urb)
 		       urb->status);
 
 	kfree(asyncdata->req);
-	kfree(asyncdata);	
+	kfree(asyncdata);
 	usb_free_urb(urb);
-	
+
 }
 
 static void
@@ -294,7 +294,7 @@ ax88179_write_cmd_async(struct usbnet *dev, u8 cmd, u16 value, u16 index,
 	}
 
 	asyncdata->req = req;
-	
+
 	if (size == 2) {
 		asyncdata->rxctl = *((u16 *)data);
 		cpu_to_le16s(&asyncdata->rxctl);
@@ -421,7 +421,7 @@ static int ax88179_suspend(struct usb_interface *intf,
 	wolp[29] = MASK_WAKEUP_EVENT_TIMER;
 	ax88179_write_cmd_nopm(dev, AX_ACCESS_WAKEUP, 0x01, 0, 38, wolp);
 
-	/* change clock */	
+	/* change clock */
 	tmp8 = 0;
 	ax88179_write_cmd_nopm(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, &tmp8);
 
@@ -431,7 +431,7 @@ static int ax88179_suspend(struct usb_interface *intf,
 
 	tmp8 = ax179_data->reg_monitor;
 	ax88179_write_cmd_nopm(dev, AX_ACCESS_MAC, AX_MONITOR_MODE, 1, 1, &tmp8);
-	
+
 	return 0;
 }
 
@@ -439,7 +439,7 @@ static int ax88179_suspend(struct usb_interface *intf,
 static void ax88179_EEE_setting(struct usbnet *dev)
 {
 	u16 tmp16;
-	
+
 	if (bEEE) {
 		// Enable EEE
 		tmp16 = 0x07;
@@ -543,7 +543,7 @@ static int ax88179_resume(struct usb_interface *intf)
 	/* Ethernet PHY Auto Detach*/
 	ax88179_AutoDetach(dev, 1);
 
-	/* change clock */	
+	/* change clock */
 	ax88179_read_cmd_nopm(dev, AX_ACCESS_MAC,  AX_CLK_SELECT,
 			      1, 1, &tmp8, 0);
 	tmp8 |= AX_CLK_SELECT_ACS | AX_CLK_SELECT_BCS;
@@ -672,12 +672,12 @@ int ax88179_get_link_ksettings(struct net_device *netdev,
 			       struct ethtool_link_ksettings *cmd)
 {
 	struct usbnet *dev = netdev_priv(netdev);
-	
+
 	if (!dev->mii.mdio_read)
 		return -EOPNOTSUPP;
-	
-	mii_ethtool_get_link_ksettings(&dev->mii, cmd);	
-	
+
+	mii_ethtool_get_link_ksettings(&dev->mii, cmd);
+
 	return 0;
 }
 
@@ -715,7 +715,7 @@ static int ax88179_netdev_stop(struct net_device *net)
 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
 			  2, 2, tmp16);
 
-	kfree(tmp16);	
+	kfree(tmp16);
 
 	return 0;
 }
@@ -908,7 +908,7 @@ ax88179_set_features(struct net_device *net, u32 features)
 
 {
 	u8 *tmp8;
-	struct usbnet *dev = netdev_priv(net);	
+	struct usbnet *dev = netdev_priv(net);
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 3, 0)
 	netdev_features_t changed = net->features ^ features;
@@ -1101,7 +1101,7 @@ static int ax88179_check_eeprom(struct usbnet *dev)
 
 static int ax88179_check_efuse(struct usbnet *dev, void *ledmode)
 {
-	u8	i = 0;	
+	u8	i = 0;
 	u16	csum = 0;
 	u8	*efuse;
 
@@ -1198,10 +1198,10 @@ static int ax88179_convert_old_led(struct usbnet *dev, u8 efuse, void *ledvalue)
 
 static int ax88179_led_setting(struct usbnet *dev)
 {
-	
+
 	u16 ledvalue = 0, delay = HZ / 10;
 	u16 *ledact, *ledlink;
-	u16 *tmp16;	
+	u16 *tmp16;
 	u8 *value;
 	u8 *tmp;
 	unsigned long jtimeout = 0;
@@ -1320,7 +1320,7 @@ static int ax88179_led_setting(struct usbnet *dev)
 		*ledlink |= GMII_LED1_LINK_1000;
 	if (ledvalue & LED2_LINK_1000)
 		*ledlink |= GMII_LED2_LINK_1000;
-	
+
 	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
 			  GMII_LED_ACTIVE, 2, ledact);
 
@@ -1361,7 +1361,7 @@ static int ax88179_AutoDetach(struct usbnet *dev, int in_pm)
 	u16 *tmp16;
 	u8 *tmp8;
 	int (*fnr)(struct usbnet *, u8, u16, u16, u16, void *, int);
-	int (*fnw)(struct usbnet *, u8, u16, u16, u16, void *);	
+	int (*fnw)(struct usbnet *, u8, u16, u16, u16, void *);
 
 	if (!in_pm) {
 		fnr = ax88179_read_cmd;
@@ -1387,7 +1387,7 @@ static int ax88179_AutoDetach(struct usbnet *dev, int in_pm)
 		return 0;
 	}
 
-	/* Enable Auto Detach bit */	
+	/* Enable Auto Detach bit */
 	*tmp8 = 0;
 	fnr(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, tmp8, 0);
 	*tmp8 |= AX_CLK_SELECT_ULR;
@@ -1412,7 +1412,7 @@ static int access_eeprom_mac(struct usbnet *dev, u8 *buf, u8 offset, int wflag)
 		return -ENOMEM;
 
 	for (i = 0; i < (ETH_ALEN >> 1); i++) {
-		if (wflag) {			
+		if (wflag) {
 			*tmp16 = cpu_to_le16(*(tmp + i));
 			ret = ax88179_write_cmd(dev, AX_ACCESS_EEPROM,
 						offset + i, 1, 2, tmp16);
@@ -1480,15 +1480,15 @@ static int ax88179_check_ether_addr(struct usbnet *dev)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)
 		dev->net->addr_assign_type |= NET_ADDR_RANDOM;
 #endif
-		random_ether_addr(dev->net->dev_addr); 
+		random_ether_addr(dev->net->dev_addr);
 #endif
 		*tmp = 0;
 		*(tmp + 1) = 0x0E;
 		*(tmp + 2) = 0xC6;
 		*(tmp + 3) = 0x8E;
 
-		return -EADDRNOTAVAIL;	
-	} 
+		return -EADDRNOTAVAIL;
+	}
 	return 0;
 }
 
@@ -1539,7 +1539,7 @@ static int ax88179_get_mac(struct usbnet *dev, u8* buf)
 
 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN,
 			  ETH_ALEN, dev->net->dev_addr);
-	
+
 	if (ret < 0) {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 34)
 		netdev_err(dev->net, "Failed to write MAC address: %d", ret);
@@ -1703,7 +1703,7 @@ static int ax88179_bind(struct usbnet *dev, struct usb_interface *intf)
 	ax88179_EEE_setting(dev);
 
 	ax88179_Gether_setting(dev);
-	
+
 	ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MONITOR_MODE, 1, 1, &tmp, 0);
 	ax179_data->reg_monitor = tmp;
 
@@ -1816,7 +1816,7 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
 			continue;
 		}
 
-		if (pkt_cnt == 0) {			
+		if (pkt_cnt == 0) {
 			skb->len = pkt_len;
 
 			/* Skip IP alignment psudo header */
@@ -1844,7 +1844,7 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
 		if (ax_skb) {
 #ifndef RX_SKB_COPY
 			ax_skb->len = pkt_len;
-	
+
 			/* Skip IP alignment psudo header */
 			if (NET_IP_ALIGN == 0)
 				skb_pull(ax_skb, 2);
@@ -2027,7 +2027,7 @@ static int ax88179_link_reset(struct usbnet *dev)
 #else
 		devinfo(dev, "Write medium type: 0x%04x\n", *mode);
 #endif
-	
+
 	ax88179_read_cmd(dev, 0x81, 0x8c, 0, 4, tmp32, 1);
 	delay = HZ / 2;
 	if (*tmp32 & 0x40000000) {
@@ -2042,9 +2042,9 @@ static int ax88179_link_reset(struct usbnet *dev)
 		jtimeout = jiffies + delay;
 
 		while (time_before(jiffies, jtimeout)) {
-			
+
 			ax88179_read_cmd(dev, 0x81, 0x8c, 0, 4, tmp32, 1);
-		
+
 			if (!(*tmp32 & 0x40000000))
 				break;
 
@@ -2062,9 +2062,9 @@ static int ax88179_link_reset(struct usbnet *dev)
 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
 			  2, 2, mode);
 	mii_check_media(&dev->mii, 1, 1);
-#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0)	
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0)
 	if (dev->mii.force_media)
-		netif_carrier_on(dev->net);	
+		netif_carrier_on(dev->net);
 #endif
 	kfree(tmp_16);
 
