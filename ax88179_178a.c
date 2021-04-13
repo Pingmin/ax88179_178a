@@ -1009,12 +1009,18 @@ static int ax88179_set_mac_addr(struct net_device *net, void *p)
 }
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 29)
+
+#if (defined(RHEL_RELEASE_CODE) && \
+	(RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(7, 4)))
+#define ndo_change_mtu  ndo_change_mtu_rh74
+#endif
+
 static const struct net_device_ops ax88179_netdev_ops = {
 	.ndo_open		= usbnet_open,
 	.ndo_stop		= usbnet_stop,
 	.ndo_start_xmit		= usbnet_start_xmit,
 	.ndo_tx_timeout		= usbnet_tx_timeout,
-	.ndo_change_mtu_rh74	= ax88179_change_mtu,
+	.ndo_change_mtu		= ax88179_change_mtu,
 	.ndo_do_ioctl		= ax88179_ioctl,
 	.ndo_set_mac_address	= ax88179_set_mac_addr,
 	.ndo_validate_addr	= eth_validate_addr,
