@@ -1,6 +1,6 @@
 /*
  * ASIX AX88179 based USB 3.0 Ethernet Devices
- * Copyright (C) 2021 Pingmin Fenlly Liu <pingmin(at)fenlly.org>
+ * Copyright (C) 2021 Pingmin Fenlly Liu <pingmin(at)fenlly.org>, Herman <GermanAizek@yandex.ru>
  * Copyright (C) 2003-2005 David Hollis <dhollis@davehollis.com>
  * Copyright (C) 2005 Phil Chang <pchang23@sbcglobal.net>
  * Copyright (c) 2002-2003 TiVo Inc.

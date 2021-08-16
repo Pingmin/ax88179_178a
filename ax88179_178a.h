@@ -2,7 +2,7 @@
 #define	__LINUX_USBNET_ASIX_H
 
 //#define RX_SKB_COPY
-#define DRIVER_VERSION		"1.20.1"
+#define DRIVER_VERSION		"1.20.2"
 #define DRIVER_DESCRIPTION	"ASIX AX88179_178A USB 2.0/3.0 Ethernet Devices"
 #define DRIVER_AUTHOR		"David Hollis"
 #define DRIVER_LICENSE		"GPL"
