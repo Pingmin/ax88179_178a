@@ -2369,6 +2369,23 @@ static const struct driver_info mct_info = {
 	.tx_fixup = ax88179_tx_fixup,
 };
 
+static const struct driver_info belkin_info = {
+	.description = "Belkin USB Ethernet Adapter",
+	.bind	= ax88179_bind,
+	.unbind = ax88179_unbind,
+	.status = ax88179_status,
+	.link_reset = ax88179_link_reset,
+	.reset	= ax88179_reset,
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 32)
+	.stop   = ax88179_stop,
+	.flags  = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_AVOID_UNLINK_URBS,
+#else
+	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
+#endif
+	.rx_fixup = ax88179_rx_fixup,
+	.tx_fixup = ax88179_tx_fixup,
+};
+
 static const struct usb_device_id	products[] = {
 {
 	/* ASIX AX88179 10/100/1000 */
@@ -2386,6 +2403,10 @@ static const struct usb_device_id	products[] = {
 	/* ThinkPad OneLinkDock USB GigaLAN */
 	USB_DEVICE(0x17ef, 0x304b),
 	.driver_info = (unsigned long) &lenovo_info,
+}, {
+	/* Belkin B2B128 USB 3.0 Hub + Gigabit Ethernet Adapter */
+	USB_DEVICE(0x050d, 0x0128),
+	.driver_info = (unsigned long) &belkin_info,
 }, {
 	/* Toshiba USB3.0 to Gigabit LAN Adapter */
 	USB_DEVICE(0x0930, 0x0a13),
